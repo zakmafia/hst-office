@@ -1,0 +1,61 @@
+{% extends 'bookings/main.html' %} {% block content %}
+<!-- Row start -->
+<div class="row gx-3">
+  {% for room in rooms %}
+  <div class="col-sm-4 col-12">
+    <div class="card mb-3">
+      <div class="card-header">
+        <h5 class="card-title">{{room.name}}</h5>
+      </div>
+      <div class="card-body">
+        <p>{{room.address}}</p>
+        <a href="{% url 'room_info' room.id %}" class="btn btn-outline-info"
+          >Book the room</a
+        >
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<!-- Row end -->
+<!-- Row start -->
+<div class="row gx-3">
+  <div class="col-xxl-12">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped m-0">
+            <thead>
+              <tr>
+                <th>Name of Booking</th>
+                <th>Room</th>
+                <th>Room Location</th>
+                <th>From Date</th>
+                <th>To Date</th>
+                <th>From Time</th>
+                <th>To Time</th>
+                <th>Person</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for booking in bookings|slice:'5' %}
+              <tr>
+                <td>{{booking.name}}</td>
+                <td>{{booking.room.name}}</td>
+                <td>{{booking.room.address}}</td>
+                <td>{{booking.from_date}}</td>
+                <td>{{booking.to_date}}</td>
+                <td>{{booking.from_time}}</td>
+                <td>{{booking.to_time}}</td>
+                <td>{{booking.booking_person}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Row end -->
+{% endblock content %}

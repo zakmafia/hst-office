@@ -1,0 +1,177 @@
+{% extends 'bookings/main.html' %} {% block content %}
+<!-- Row start -->
+<div class="row justify-content-center">
+  <div class="col-xxl-12">
+    <div class="card mb-3">
+      <div class="card-body">
+        <!-- Row start -->
+        <div class="row align-items-center">
+          <div class="col">
+            <h5 class="m-0">Manage Rooms</h5>
+          </div>
+          <div class="col-12 col-md-auto">
+            <a href="#" class="btn btn-outline-primary" data-bs-toggle="modal"
+              data-bs-target="#exampleModalCenterAddRoom">
+              Add Rooms +</a>
+          </div>
+        </div>
+        <!-- Row end -->
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenterAddRoom" tabindex="-1"
+          aria-labelledby="exampleModalCenterTitleAddRoom" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitleAddRoom">
+                  Add a Room +
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form action="" method="POST">
+                <div class="modal-body">
+                  <!-- Row start -->
+                  <div class="row gx-3">
+                    {% csrf_token %}
+                    <div class="col-lg-12 col-sm-4 col-12">
+                      <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        {{form.name}}
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-4 col-12">
+                      <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        {{form.address}}
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Row end -->
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                  </button>
+                  <button type="submit" name="add_a_room" class="btn btn-primary">
+                    Save changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- End Modal -->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Row end -->
+<!-- Row start -->
+<div class="row gx-3">
+  <div class="col-xxl-12">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped m-0">
+            <thead>
+              <tr>
+                <th>Room Name</th>
+                <th>Address</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for room in rooms %}
+              <form action="" method="POST">
+                {% csrf_token %}
+                <tr>
+                  <td>{{room.name}}</td>
+                  <td>{{room.address}}</td>
+                  <td>
+                    <a class="btn btn-info btn-sm" data-bs-toggle="modal"
+                      data-bs-target="#exampleModalCenterEditRoom-{{room.id}}" href="#"><i class="bi bi-pencil"></i>
+                    </a>
+                    <a class="btn btn-danger btn-icon btn-sm" data-bs-toggle="modal"
+                      data-bs-target="#exampleModalCenterDeleteRoom-{{room.id}}" data-id="{{room.id}}" href="#"><i
+                        class="bi bi-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+                <!-- Delete Modal-->
+                <div class="modal fade" id="exampleModalCenterDeleteRoom-{{room.id}}" tabindex="-1"
+                  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">
+                          Are you sure you want to delete '{{room.name}}'?
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <input type="hidden" name="room_id" value="{{room.id}}" />
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                          Close
+                        </button>
+                        <button type="submit" name="delete_a_room" class="btn btn-primary">
+                          Delete a Room
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--End Delete Modal-->
+                <!-- Edit Modal -->
+                <div class="modal fade" id="exampleModalCenterEditRoom-{{room.id}}" tabindex="-1"
+                  aria-labelledby="exampleModalCenterTitleEditRoom" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitleEditRoom">
+                          Edit Room '{{room.name}}'
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <form action="" method="POST">
+                        <div class="modal-body">
+                          <!-- Row start -->
+                          <div class="row gx-3">
+                            {% csrf_token %}
+                            <div class="col-lg-12 col-sm-4 col-12">
+                              <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" name="room_name" value="{{ room.name }}">
+                              </div>
+                            </div>
+                            <div class="col-lg-12 col-sm-4 col-12">
+                              <div class="mb-3">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" name="room_address" value="{{ room.address }}">
+                              </div>
+                            </div>
+                          </div>
+                          <!-- Row end -->
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                          </button>
+                          <button type="submit" name="edit_a_room" class="btn btn-primary">
+                            Save changes
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <!-- End Edit Modal -->
+              </form>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Row end -->
+{% endblock content %}

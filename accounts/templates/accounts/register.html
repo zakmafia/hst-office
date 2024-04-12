@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login</title>
+
+    <!-- Meta -->
+    <meta name="description" content="HST Office" />
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.svg' %}" />
+
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/fonts/bootstrap/bootstrap-icons.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'assets/css/main.min.css' %}" />
+
+    <!-- Scrollbar CSS -->
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/vendor/overlay-scroll/OverlayScrollbars.min.css' %}"
+    />
+  </head>
+  <body class="bg-white">
+    <!-- Container start -->
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-4 col-lg-5 col-sm-6 col-12">
+          <form action="" class="my-5" method="POST">
+            {% if messages %} {% for message in messages %}
+            <!-- Message-display -->
+            <div
+              id="messages"
+              class="alert border border-{{message.tags}} alert-dismissible fade show text-{{message.tags}}"
+              role="alert"
+            >
+              <b>{{message}}</b>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+              ></button>
+            </div>
+            <!-- End Message-display -->
+            {% endfor %} {% endif %} {% csrf_token %}
+            <div class="border rounded-2 p-4 mt-5">
+              <div class="login-form">
+                <a href="index.html" class="mb-4 d-flex">
+                  <img
+                    src="{% static 'assets/images/HST_LOGO.png' %}"
+                    class="img-fluid login-logo"
+                    alt="Earth Admin Dashboard"
+                  />
+                </a>
+                <h5 class="fw-light mb-5">Create your admin account.</h5>
+                <div class="mb-3">
+                  <label class="form-label">Your Email</label>
+                  {{form.email}}
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Your Password</label>
+                  {{form.password}}
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Confirm Password</label>
+                  {{form.confirm_password}}
+                </div>
+                <div class="mb-3">{{ form.non_field_errors }}</div>
+                <div class="d-grid py-3 mt-4">
+                  <button type="submit" class="btn btn-lg btn-primary">
+                    Signup
+                  </button>
+                </div>
+                <div class="text-center pt-4">
+                  <span>Already have an account?</span>
+                  <a
+                    href="{% url 'login' %}"
+                    class="text-blue text-decoration-underline ms-2"
+                  >
+                    Login</a
+                  >
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Container end -->
+
+    <!-- Required jQuery first, then Bootstrap Bundle JS -->
+    <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/moment.min.js' %}"></script>
+    <!-- Custom JS files -->
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+  </body>
+</html>

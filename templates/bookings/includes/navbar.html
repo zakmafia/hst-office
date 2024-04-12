@@ -1,0 +1,42 @@
+{% load static %}
+<!-- Sidebar wrapper start -->
+<nav id="sidebar" class="sidebar-wrapper">
+  <!-- Sidebar profile starts -->
+  <div class="shop-profile">
+    <p class="mb-1 fw-bold text-primary">HST</p>
+    <p class="m-0">Room Booking</p>
+  </div>
+  <!-- Sidebar profile ends -->
+
+  <!-- Sidebar menu starts -->
+  <div class="sidebarMenuScroll">
+    <ul class="sidebar-menu">
+      <li
+        class="{% if title_name == 'Bookings' %}active current-page{% endif %}"
+      >
+        <a href="{% url 'bookings' %}">
+          <i class="bi bi-pie-chart"></i>
+          <span class="menu-text">Bookings</span>
+        </a>
+      </li>
+      <li
+        class="{% if title_name == 'My Bookings' %}active current-page{% endif %}"
+      >
+        <a href="{% url 'my_bookings' %}">
+          <i class="bi bi-box"></i>
+          <span class="menu-text">My Bookings</span>
+        </a>
+      </li>
+      <li
+        class="{% if title_name == 'Manage Rooms' %}active current-page{% endif %}"
+      >
+        <a href="{% url 'manage_rooms' %}">
+          <i class="bi bi-calendar2"></i>
+          <span class="menu-text">Manage Room</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!-- Sidebar menu ends -->
+</nav>
+<!-- Sidebar wrapper end -->
