@@ -1,0 +1,75 @@
+{% extends 'bookings/main.html' %} {% block content %} {%if booking %}
+<!-- Row start -->
+<div class="row gx-3">
+    <div class="col-xxl-12">
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <table class="table table-striped m-0">
+                            <thead>
+                                <tr>
+                                    <th>Name of Booking</th>
+                                    <th>Room</th>
+                                    <th>Room Location</th>
+                                    <th>From Date</th>
+                                    <th>To Date</th>
+                                    <th>From Time</th>
+                                    <th>To Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{booking.name}}</td>
+                                    <td>{{booking.room.name}}</td>
+                                    <td>{{booking.room.address}}</td>
+                                    <td>{{booking.from_date}}</td>
+                                    <td>{{booking.to_date}}</td>
+                                    <td>{{booking.from_time}}</td>
+                                    <td>{{booking.to_time}}</td>
+                                    <td>
+                                        <a href="#" id="cancel_booking_from_email_link" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModalCenterMyBookingFromEmail-{{booking.id}}"
+                                            data-id="{{booking.id}}">Cancel Booking</a>
+                                    </td>
+                                </tr>
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModalCenterMyBookingFromEmail-{{booking.id}}"
+                                    tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                    Are you sure you want to cancel the booking?
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+
+                                            <input type="hidden" name="my_booking_id_from_email"
+                                                value="{{booking.id}}" />
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    Close
+                                                </button>
+                                                <button type="submit" name="cancel_my_booking_from_email"
+                                                    class="btn btn-primary">
+                                                    Cancel Booking
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--End Modal-->
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Row end -->
+{% endif %} {% endblock content %}

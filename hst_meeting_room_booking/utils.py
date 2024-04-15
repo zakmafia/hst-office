@@ -43,16 +43,16 @@ def send_booking_email(request, booking):
     send_email = EmailMessage(mail_subject, message, to=[to_email])
     send_email.send()
     
-def send_cancellation_email(admin_user, booking_info, reason):
+def admin_send_cancellation_email(admin_user, booking_info, reason):
     mail_subject = 'Meeting Room Booking Cancellation'
-    message = render_to_string('bookings/admin_cancellation_booking.html', {
+    message = render_to_string('bookings/emails/admin_cancellation_booking.html', {
         'booking_person_name': booking_info.booking_person.first_name,
         'name': booking_info.name,
         'booking_date_from': booking_info.from_date,
         'booking_date_to': booking_info.to_date,
         'booking_time_from': booking_info.from_time,
         'booking_time_to': booking_info.to_time,
-        'admin_name': admin_user.first_name,
+        'admin_name': admin_user.username,
         'reason': reason
     })
     to_email = booking_info.booking_person.email

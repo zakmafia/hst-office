@@ -137,36 +137,22 @@ setTimeout(function () {
   $("#messages").fadeOut("slow");
 }, 4000);
 
-// $(document).ready(function () {
-//   // Add event listener for form submission
-//   $("#booking_form").on("submit", function (event) {
-//     // Prevent the default form submission behavior
-//     // event.preventDefault();
+// For My bookings custom tab selection
+$(document).ready(function () {
+  // Retrieve the active tab from local storage
+  var activeTab = localStorage.getItem("activeTab");
+  if (activeTab) {
+    $('#customTabMyBooking a[href="' + activeTab + '"]').tab("show");
+  }
 
-//     // Get the form element
-//     const form = $(this);
-
-//     // Show the spinner associated with the form
-//     form.find(".spinner-border").show();
-
-//     // Serialize the form data
-//     const formData = form.serialize();
-
-//     // Submit the form data using AJAX
-//     $.ajax({
-//       type: form.attr("method"),
-//       url: form.attr("action"),
-//       data: formData,
-//       success: function (response) {
-//         // Handle the success response if needed
-//       },
-//       error: function (xhr, status, error) {
-//         // Handle the error response if needed
-//       },
-//       complete: function () {
-//         // Hide the spinner associated with the form when the AJAX request is complete
-//         form.find(".spinner-border").hide();
-//       },
-//     });
-//   });
-// });
+  // Store the active tab in local storage when a tab is shown
+  $('#customTabMyBooking a[data-bs-toggle="tab"]').on(
+    "shown.bs.tab",
+    function (e) {
+      localStorage.setItem("activeTab", $(e.target).attr("href"));
+    }
+  );
+  var currentDate = new Date().toISOString().split("T")[0];
+  document.getElementById("id_from_date").setAttribute("min", currentDate);
+  document.getElementById("id_to_date").setAttribute("min", currentDate);
+});

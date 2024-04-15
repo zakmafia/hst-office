@@ -5,7 +5,7 @@
     <div class="card mb-3">
       <div class="card-body">
         <div class="custom-tabs-container">
-          <ul class="nav nav-tabs" id="customTab" role="tablist">
+          <ul class="nav nav-tabs" id="customTabMyBooking" role="tablist">
             <li class="nav-item" role="presentation">
               <a
                 class="nav-link active"
@@ -27,7 +27,7 @@
                 role="tab"
                 aria-controls="two"
                 aria-selected="false"
-                >Booking History</a
+                >Past Booking History</a
               >
             </li>
           </ul>
@@ -154,7 +154,24 @@
               <div class="col-xxl-12 col-sm-6 col-12">
                 <div class="card mb-3">
                   <div class="card-header">
-                    <h5 class="card-title">My Bookings History</h5>
+                    <form action="#" method="POST">
+                      {% csrf_token %}
+                      <div class="row align-items-center">
+                        <div class="col">
+                          <h5 class="card-title">My Past Bookings History</h5>
+                        </div>
+
+                        <div class="col-12 col-md-auto">
+                          <button
+                            name="clear_booking_history"
+                            class="btn btn-outline-danger"
+                            type="submit"
+                          >
+                            Clear History
+                          </button>
+                        </div>
+                      </div>
+                    </form>
                   </div>
                   <div class="card-body">
                     <div class="scroll350 my-4">

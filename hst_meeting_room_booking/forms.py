@@ -25,8 +25,8 @@ class BookingForm(ModelForm):
         model = Booking
         fields = ['name', 'from_date', 'to_date', 'from_time', 'to_time', 'description']
         widgets = {
-            'from_date': DateInput(attrs={'name': 'from_date'}),
-            'to_date': DateInput(attrs={'name': 'to_date'}),
+            'from_date': DateInput(attrs={'name': 'from_date', 'id': 'id_from_date'}),
+            'to_date': DateInput(attrs={'name': 'to_date', 'id': 'id_to_date'}),
             'from_time': TimeInput(),
             'to_time': TimeInput(),
         }

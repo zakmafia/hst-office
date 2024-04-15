@@ -1,196 +1,208 @@
 {% extends 'bookings/main.html' %} {% block content %}
 <!-- Row starts -->
 <div class="row gx-3">
-    <div class="col-xxl-4 col-sm-6 col-12">
-        <div class="card mb-3">
-            <div class="card-header">
-                <h5 class="card-title">{{room.name}}'s Bookings</h5>
-            </div>
-            <div class="card-body">
-                <div class="scroll350 my-4">
-                    {% for info in booking_info %}
-                    <form action="#" method="POST">
-                        {% csrf_token %}
-                        <div class="d-flex flex-row mb-4">
-                            <div class="ms-3">
-                                <p class="mb-2">
-                                    <strong class="text-primary">{{info.name}}</strong>
-                                    {{info.from_date}} - {{info.to_date}} | {{info.from_time}} -
-                                    {{info.to_time}}
-                                </p>
-                                <!-- Time -->
-                                <small class="text-primary">{{info.booking_person}}</small>
-                                <small class="text-secondary">|</small>
-                                <small class="text-secondary">{{info.created_on}}</small>
-                                <small class="text-secondary">|</small>
-                                <small class="text-secondary"><a href="#" id="cancel_booking_link"
-                                        data-bs-toggle="modal" data-bs-target="#exampleModalCenter-{{info.id}}"
-                                        data-id="{{info.id}}">Cancel Booking</a></small>
-                                <!-- Modal -->
-                                <div class="modal fade" id="exampleModalCenter-{{info.id}}" tabindex="-1"
-                                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalCenterTitle">
-                                                    Are you sure you want to cancel the booking?
-                                                </h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
+  <div class="col-xxl-4 col-sm-12 col-12">
+    <div class="card mb-3">
+      <div class="card-header">
+        <h5 class="card-title">{{room.name}}'s Bookings</h5>
+      </div>
+      <div class="card-body">
+        <div class="scroll350 my-4">
+          {% for info in booking_info %}
+          <form action="#" method="POST" onsubmit="cancellationLoader()">
+            {% csrf_token %}
+            <div class="d-flex flex-row mb-4">
+              <div class="ms-3">
+                <p class="mb-2">
+                  <strong class="text-primary">{{info.name}}</strong>
+                  {{info.from_date}} - {{info.to_date}} | {{info.from_time}} -
+                  {{info.to_time}}
+                </p>
+                <!-- Time -->
+                <small class="text-primary">{{info.booking_person}}</small>
+                <small class="text-secondary">|</small>
+                <small class="text-secondary">{{info.created_on}}</small>
+                <small class="text-secondary">|</small>
+                <small class="text-secondary"
+                  ><a
+                    href="#"
+                    id="cancel_booking_link"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModalCenter-{{info.id}}"
+                    data-id="{{info.id}}"
+                    >Cancel Booking</a
+                  ></small
+                >
+                <!-- Modal -->
+                <div
+                  class="modal fade"
+                  id="exampleModalCenter-{{info.id}}"
+                  tabindex="-1"
+                  aria-labelledby="exampleModalCenterTitle"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">
+                          Are you sure you want to cancel the booking?
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
 
-                                            <div class="modal-body">
-                                                <div class="form-group">
-                                                    <input type="hidden" name="booking_id" value="{{info.id}}" />
-                                                    <label class="form-label">Reason:</label>
-                                                    <textarea name="reason" class="form-control"
-                                                        placeholder="Enter text here..."></textarea>
-                                                </div>
-                                                <!-- form-group end.// -->
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                    Close
-                                                </button>
-                                                <button type="submit" name="cancel_booking" class="btn btn-primary">
-                                                    Cancel Booking
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--End Modal-->
-                            </div>
+                      <div class="modal-body">
+                        <div
+                          id="cancellation_spinner"
+                          class="text-center"
+                          style="display: none"
+                        >
+                          <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
                         </div>
-                    </form>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xxl-8">
-        <div id="booking-spinner" style="display: none;" class="row justify-content-center">
-            <div class="col-xxl-12">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <!-- Row start -->
-                        <div class="row align-items-center">
-                            <div class="d-flex justify-content-center">
-                                <div class="spinner-border" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                          <input
+                            type="hidden"
+                            name="booking_id"
+                            value="{{info.id}}"
+                          />
+                          <label class="form-label">Reason:</label>
+                          <textarea
+                            name="reason"
+                            required
+                            class="form-control"
+                            placeholder="Enter text here..."
+                          ></textarea>
                         </div>
-                        <!-- Row end -->
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="booking-form" class="card mb-3">
-            <div class="card-header">
-                <h5 class="card-title">Book the Room</h5>
-            </div>
-            <form action="" method="POST" onsubmit="openLoader()">
-                <div class="card-body">
-                    <!-- Row start -->
-                    <div class="row gx-3">
-                        {% csrf_token %}
-                        <div class="col-lg-12 col-sm-4 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">Name</label>
-                                {{form.name}}
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-sm-4 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">From Date:</label>
-                                {{form.from_date}}
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-sm-4 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">To Date:</label>
-                                {{form.to_date}}
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-sm-4 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">From Time:</label>
-                                {{form.from_time}}
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-sm-4 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">To Time:</label>
-                                {{form.to_time}}
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">Description:</label>
-                                {{form.description}}
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Row end -->
-                </div>
-                <div class="card-footer">
-                    <div class="d-flex gap-2 justify-content-center">
-                        <a href="{% url 'bookings' %}" class="btn btn-outline-secondary">
-                            Cancel
-                        </a>
-                        <button type="submit" name="book" class="btn btn-success">
-                            Book
+                        <!-- form-group end.// -->
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
                         </button>
+                        <button
+                          type="submit"
+                          name="cancel_booking_admin"
+                          class="btn btn-primary"
+                        >
+                          Cancel Booking
+                        </button>
+                      </div>
                     </div>
+                  </div>
                 </div>
-            </form>
+                <!--End Modal-->
+              </div>
+            </div>
+          </form>
+          {% endfor %}
         </div>
+      </div>
     </div>
+  </div>
+  <div class="col-xxl-8">
+    <div
+      id="booking-spinner"
+      style="display: none"
+      class="row justify-content-center"
+    >
+      <div class="col-xxl-12">
+        <div class="card mb-3">
+          <div class="card-body">
+            <!-- Row start -->
+            <div class="row align-items-center">
+              <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            </div>
+            <!-- Row end -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="booking-form" class="card mb-3">
+      <div class="card-header">
+        <h5 class="card-title">Book the Room</h5>
+      </div>
+      <form action="" method="POST" onsubmit="openLoader()">
+        <div class="card-body">
+          <!-- Row start -->
+          <div class="row gx-3">
+            {% csrf_token %}
+            <div class="col-lg-12 col-sm-4 col-12">
+              <div class="mb-3">
+                <label class="form-label">Name</label>
+                {{form.name}}
+              </div>
+            </div>
+            <div class="col-lg-6 col-sm-4 col-12">
+              <div class="mb-3">
+                <label class="form-label">From Date:</label>
+                {{form.from_date}}
+              </div>
+            </div>
+            <div class="col-lg-6 col-sm-4 col-12">
+              <div class="mb-3">
+                <label class="form-label">To Date:</label>
+                {{form.to_date}}
+              </div>
+            </div>
+            <div class="col-lg-6 col-sm-4 col-12">
+              <div class="mb-3">
+                <label class="form-label">From Time:</label>
+                {{form.from_time}}
+              </div>
+            </div>
+            <div class="col-lg-6 col-sm-4 col-12">
+              <div class="mb-3">
+                <label class="form-label">To Time:</label>
+                {{form.to_time}}
+              </div>
+            </div>
+            <div class="col-sm-12 col-12">
+              <div class="mb-3">
+                <label class="form-label">Description:</label>
+                {{form.description}}
+              </div>
+            </div>
+          </div>
+          <!-- Row end -->
+        </div>
+        <div class="card-footer">
+          <div class="d-flex gap-2 justify-content-center">
+            <a href="{% url 'bookings' %}" class="btn btn-outline-secondary">
+              Cancel
+            </a>
+            <button type="submit" name="book" class="btn btn-success">
+              Book
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 <!-- Row ends -->
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">
-                    Are you sure you want to cancel the booking?
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body">
-                <div class="form-group">
-                    {{info.id}}
-                    <label class="form-label">Reason:</label>
-                    <textarea name="reason" class="form-control" placeholder="Enter text here..."></textarea>
-                </div>
-                <!-- form-group end.// -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Close
-                </button>
-                <button type="submit" name="cancel_booking" class="btn btn-primary">
-                    Cancel Booking
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- End Modal -->
-
 <script>
-
-    function openLoader() {
-        document.getElementById("booking-spinner").style.display = "block";
-        document.getElementById("booking-form").style.display = "none";
-    }
-
+  function openLoader() {
+    document.getElementById("booking-spinner").style.display = "block";
+    document.getElementById("booking-form").style.display = "none";
+  }
+  function cancellationLoader() {
+    document.getElementById("cancellation_spinner").style.display = "block";
+  }
 </script>
 
 {% endblock content %}
