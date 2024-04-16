@@ -1,0 +1,42 @@
+{% load static %}
+<!-- Sidebar wrapper start -->
+<nav id="sidebar" class="sidebar-wrapper">
+  <!-- Sidebar profile starts -->
+  <div class="shop-profile">
+    <p class="mb-1 fw-bold text-primary">HST</p>
+    <p class="m-0">Help Desk</p>
+  </div>
+  <!-- Sidebar profile ends -->
+
+  <!-- Sidebar menu starts -->
+  <div class="sidebarMenuScroll">
+    <ul class="sidebar-menu">
+      <li
+        class="{% if title_name == 'Help Desk' %}active current-page{% endif %}"
+      >
+        <a href="{% url 'help_desk' %}">
+          <i class="bi bi-pie-chart"></i>
+          <span class="menu-text">Help Desk</span>
+        </a>
+      </li>
+      <li
+        class="{% if title_name == 'My Requests' %}active current-page{% endif %}"
+      >
+        <a href="{% url 'my_requests' %}">
+          <i class="bi bi-box"></i>
+          <span class="menu-text">My Requests</span>
+        </a>
+      </li>
+      <li
+        class="{% if title_name == 'Knowledge Base' %}active current-page{% endif %}"
+      >
+        <a href="{% url 'knowledge_base' %}">
+          <i class="bi bi-calendar2"></i>
+          <span class="menu-text">Knowledge Base</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!-- Sidebar menu ends -->
+</nav>
+<!-- Sidebar wrapper end -->

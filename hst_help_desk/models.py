@@ -29,6 +29,9 @@ class Ticket(models.Model):
         max_length=200, choices=STATUS_TYPES, null=True, blank=True, default='in_progress')
     created_on = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    
+    def __str__(self):
+        return f'{self.requester} - {self.issue}'
 
 class KnowledgeBase(models.Model):
     docfile = models.FileField(upload_to='documents/%Y/%m/%d')

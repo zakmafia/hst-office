@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HST Office</title>
+
+    <!-- Meta -->
+    <link rel="shortcut icon" href="assets/images/favicon.svg" />
+
+    <!-- *************
+			************ CSS Files *************
+		************* -->
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/fonts/bootstrap/bootstrap-icons.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'assets/css/main.min.css' %}" />
+
+    <!-- *************
+			************ Vendor Css Files *************
+		************ -->
+  </head>
+
+  <body class="error-screen bg-primary">
+    <!-- Container start -->
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-9">
+          <div class="d-flex align-items-center justify-content-center vh-100">
+            <div class="text-center text-white">
+              <h1 class="error-title mb-3">404</h1>
+              <h3 class="mb-5 fw-lighter lh-2">
+                We're sorry but it looks <br />like that page doesn't exist
+                anymore.
+              </h3>
+              <a
+                href="{% url 'bookings' %}"
+                class="btn btn-warning px-5 shadow-lg py-3 fs-5"
+                >Go back to dashboard</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Container end -->
+  </body>
+</html>
