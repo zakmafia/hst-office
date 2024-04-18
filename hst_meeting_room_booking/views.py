@@ -103,7 +103,7 @@ def view_room_information(request, room_id):
                 return HttpResponseRedirect('/room-booking/room-info/' + str(room_id))  
             
     if 'cancel_booking_admin' in request.POST:
-        if request.user.is_admin:
+        if request.user.is_admin or request.user.role == 'manager':
             booking_id = request.POST.get('booking_id')
             reason = request.POST.get('reason')
             booking = get_object_or_404(Booking, id=booking_id)

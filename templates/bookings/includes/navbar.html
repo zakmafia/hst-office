@@ -11,30 +11,26 @@
   <!-- Sidebar menu starts -->
   <div class="sidebarMenuScroll">
     <ul class="sidebar-menu">
-      <li
-        class="{% if title_name == 'Bookings' %}active current-page{% endif %}"
-      >
+      <li class="{% if title_name == 'Bookings' %}active current-page{% endif %}">
         <a href="{% url 'bookings' %}">
           <i class="bi bi-pie-chart"></i>
           <span class="menu-text">Bookings</span>
         </a>
       </li>
-      <li
-        class="{% if title_name == 'My Bookings' %}active current-page{% endif %}"
-      >
+      <li class="{% if title_name == 'My Bookings' %}active current-page{% endif %}">
         <a href="{% url 'my_bookings' %}">
           <i class="bi bi-box"></i>
           <span class="menu-text">My Bookings</span>
         </a>
       </li>
-      <li
-        class="{% if title_name == 'Manage Rooms' %}active current-page{% endif %}"
-      >
+      {% if user.is_admin %}
+      <li class="{% if title_name == 'Manage Rooms' %}active current-page{% endif %}">
         <a href="{% url 'manage_rooms' %}">
           <i class="bi bi-calendar2"></i>
           <span class="menu-text">Manage Room</span>
         </a>
       </li>
+      {% endif %}
     </ul>
   </div>
   <!-- Sidebar menu ends -->

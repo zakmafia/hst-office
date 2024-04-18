@@ -22,78 +22,42 @@
                 <small class="text-primary">{{info.booking_person}}</small>
                 <small class="text-secondary">|</small>
                 <small class="text-secondary">{{info.created_on}}</small>
+                {% if user.is_admin or user.role == 'manager' %}
                 <small class="text-secondary">|</small>
-                <small class="text-secondary"
-                  ><a
-                    href="#"
-                    id="cancel_booking_link"
-                    data-bs-toggle="modal"
-                    data-bs-target="#exampleModalCenter-{{info.id}}"
-                    data-id="{{info.id}}"
-                    >Cancel Booking</a
-                  ></small
-                >
+                <small class="text-secondary"><a href="#" id="cancel_booking_link" data-bs-toggle="modal"
+                    data-bs-target="#exampleModalCenter-{{info.id}}" data-id="{{info.id}}">Cancel Booking</a></small>
+                {% endif %}
                 <!-- Modal -->
-                <div
-                  class="modal fade"
-                  id="exampleModalCenter-{{info.id}}"
-                  tabindex="-1"
-                  aria-labelledby="exampleModalCenterTitle"
-                  aria-hidden="true"
-                >
+                <div class="modal fade" id="exampleModalCenter-{{info.id}}" tabindex="-1"
+                  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                       <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalCenterTitle">
                           Are you sure you want to cancel the booking?
                         </h5>
-                        <button
-                          type="button"
-                          class="btn-close"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                        ></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
 
                       <div class="modal-body">
-                        <div
-                          id="cancellation_spinner"
-                          class="text-center"
-                          style="display: none"
-                        >
+                        <div id="cancellation_spinner" class="text-center" style="display: none">
                           <div class="spinner-border" role="status">
                             <span class="visually-hidden">Loading...</span>
                           </div>
                         </div>
                         <div class="form-group">
-                          <input
-                            type="hidden"
-                            name="booking_id"
-                            value="{{info.id}}"
-                          />
+                          <input type="hidden" name="booking_id" value="{{info.id}}" />
                           <label class="form-label">Reason:</label>
-                          <textarea
-                            name="reason"
-                            required
-                            class="form-control"
-                            placeholder="Enter text here..."
-                          ></textarea>
+                          <textarea name="reason" required class="form-control"
+                            placeholder="Enter text here..."></textarea>
                         </div>
                         <!-- form-group end.// -->
                       </div>
                       <div class="modal-footer">
-                        <button
-                          type="button"
-                          class="btn btn-secondary"
-                          data-bs-dismiss="modal"
-                        >
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                           Close
                         </button>
-                        <button
-                          type="submit"
-                          name="cancel_booking_admin"
-                          class="btn btn-primary"
-                        >
+                        <button type="submit" name="cancel_booking_admin" class="btn btn-primary">
                           Cancel Booking
                         </button>
                       </div>
@@ -110,11 +74,7 @@
     </div>
   </div>
   <div class="col-xxl-8">
-    <div
-      id="booking-spinner"
-      style="display: none"
-      class="row justify-content-center"
-    >
+    <div id="booking-spinner" style="display: none" class="row justify-content-center">
       <div class="col-xxl-12">
         <div class="card mb-3">
           <div class="card-body">

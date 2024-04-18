@@ -1,199 +1,163 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>HST Office</title>
 
-    <!-- Meta -->
-    <meta name="description" content="HST Office" />
-    <link rel="shortcut icon" href="{% static 'assets/images/favicon.svg' %}" />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HST Office</title>
 
-    <!-- *************
+  <!-- Meta -->
+  <meta name="description" content="HST Office" />
+  <link rel="shortcut icon" href="{% static 'assets/images/hst_favicon.ico' %}" />
+
+  <!-- *************
 			************ CSS Files *************
 		************* -->
-    <link
-      rel="stylesheet"
-      href="{% static 'assets/fonts/bootstrap/bootstrap-icons.css' %}"
-    />
-    <link rel="stylesheet" href="{% static 'assets/css/main.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/fonts/bootstrap/bootstrap-icons.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/main.min.css' %}" />
 
-    <!-- *************
+  <!-- *************
 			************ Vendor Css Files *************
 		************ -->
 
-    <!-- Scrollbar CSS -->
-    <link
-      rel="stylesheet"
-      href="{% static 'assets/vendor/overlay-scroll/OverlayScrollbars.min.css' %}"
-    />
-  </head>
+  <!-- Scrollbar CSS -->
+  <link rel="stylesheet" href="{% static 'assets/vendor/overlay-scroll/OverlayScrollbars.min.css' %}" />
+</head>
 
-  <body>
-    <!-- Page wrapper start -->
-    <div class="page-wrapper">
-      <!-- App header starts -->
-      <div class="app-header d-flex align-items-center">
-        <!-- Toggle buttons start -->
-        <div class="d-flex">
-          <button class="toggle-sidebar" id="toggle-sidebar">
-            <i class="bi bi-list lh-1"></i>
-          </button>
-          <button class="pin-sidebar" id="pin-sidebar">
-            <i class="bi bi-list lh-1"></i>
-          </button>
-        </div>
-        <!-- Toggle buttons end -->
+<body>
+  <!-- Page wrapper start -->
+  <div class="page-wrapper">
+    <!-- App header starts -->
+    <div class="app-header d-flex align-items-center">
+      <!-- Toggle buttons start -->
+      <div class="d-flex">
+        <button class="toggle-sidebar" id="toggle-sidebar">
+          <i class="bi bi-list lh-1"></i>
+        </button>
+        <button class="pin-sidebar" id="pin-sidebar">
+          <i class="bi bi-list lh-1"></i>
+        </button>
+      </div>
+      <!-- Toggle buttons end -->
 
-        <!-- App brand starts -->
-        <div class="app-brand py-2 ms-3">
-          <a href="{% url 'bookings' %}" class="d-sm-block d-none">
-            <img
-              src="{% static 'assets/images/HST_LOGO.png' %}"
-              class="logo"
-              alt="Bootstrap Gallery"
-            />
+      <!-- App brand starts -->
+      <div class="app-brand py-2 ms-3">
+        <a href="{% url 'bookings' %}" class="d-sm-block d-none">
+          <img src="{% static 'assets/images/HST_LOGO.png' %}" class="logo" alt="Bootstrap Gallery" />
+        </a>
+        <a href="{% url 'bookings' %}" class="d-sm-none d-block">
+          <img src="{% static 'assets/images/HST_LOGO.png' %}" class="logo" alt="Bootstrap Gallery" />
+        </a>
+      </div>
+      <!-- App brand ends -->
+
+      <!-- App header actions start -->
+      <div class="header-actions col">
+        <div class="dropdown ms-2">
+          <a id="userSettings" class="dropdown-toggle d-flex py-2 align-items-center text-decoration-none" href="#!"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="ms-2 text-truncate d-lg-block d-none">{{user.username}}</span>
           </a>
-          <a href="{% url 'bookings' %}" class="d-sm-none d-block">
-            <img
-              src="{% static 'assets/images/HST_LOGO.png' %}"
-              class="logo"
-              alt="Bootstrap Gallery"
-            />
-          </a>
-        </div>
-        <!-- App brand ends -->
-
-        <!-- App header actions start -->
-        <div class="header-actions col">
-          <div class="dropdown ms-2">
-            <a
-              id="userSettings"
-              class="dropdown-toggle d-flex py-2 align-items-center text-decoration-none"
-              href="#!"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <span class="ms-2 text-truncate d-lg-block d-none"
-                >{{user.username}}</span
-              >
-            </a>
-            <div class="dropdown-menu dropdown-menu-end shadow-lg">
-              {% comment %}
-              <div class="header-action-links mx-3 gap-2">
-                <a class="dropdown-item" href="profile.html"
-                  ><i class="bi bi-person text-primary"></i>Profile</a
-                >
-                <a class="dropdown-item" href="settings.html"
-                  ><i class="bi bi-gear text-danger"></i>Settings</a
-                >
-              </div>
-              {% endcomment %}
-              <div class="mx-3 mt-2 d-grid">
-                <a href="{% url 'logout' %}" class="btn btn-primary btn-sm"
-                  >Logout</a
-                >
-              </div>
+          <div class="dropdown-menu dropdown-menu-end shadow-lg">
+            {% comment %}
+            <div class="header-action-links mx-3 gap-2">
+              <a class="dropdown-item" href="profile.html"><i class="bi bi-person text-primary"></i>Profile</a>
+              <a class="dropdown-item" href="settings.html"><i class="bi bi-gear text-danger"></i>Settings</a>
+            </div>
+            {% endcomment %}
+            <div class="mx-3 mt-2 d-grid">
+              <a href="{% url 'logout' %}" class="btn btn-primary btn-sm">Logout</a>
             </div>
           </div>
         </div>
-        <!-- App header actions end -->
       </div>
-      <!-- App header ends -->
+      <!-- App header actions end -->
+    </div>
+    <!-- App header ends -->
 
-      <!-- Main container start -->
-      <div class="main-container">
-        {% include "helpdesk/includes/navbar.html" %}
+    <!-- Main container start -->
+    <div class="main-container">
+      {% include "helpdesk/includes/navbar.html" %}
 
-        <!-- App container starts -->
-        <div class="app-container">
-          <!-- App hero header starts -->
-          <div class="app-hero-header d-flex align-items-center">
-            <!-- Breadcrumb start -->
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <i
-                  class="bi bi-house lh-1 pe-3 me-3 border-end border-dark"
-                ></i>
-                <a href="{% url 'bookings' %}" class="text-decoration-none"
-                  >Home</a
-                >
-              </li>
-              {% if type == 'room_type' %}
-              <li class="breadcrumb-item text-secondary" aria-current="page">
-                Room
-              </li>
-              {% endif %}
-              <li class="breadcrumb-item text-secondary" aria-current="page">
-                {% if title_name %}{{ title_name }}{% endif %}
-              </li>
-            </ol>
-            <!-- Breadcrumb end -->
-          </div>
-          <!-- App Hero header ends -->
+      <!-- App container starts -->
+      <div class="app-container">
+        <!-- App hero header starts -->
+        <div class="app-hero-header d-flex align-items-center">
+          <!-- Breadcrumb start -->
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <i class="bi bi-house lh-1 pe-3 me-3 border-end border-dark"></i>
+              <a href="{% url 'bookings' %}" class="text-decoration-none">Home</a>
+            </li>
+            {% if type == 'room_type' %}
+            <li class="breadcrumb-item text-secondary" aria-current="page">
+              Room
+            </li>
+            {% endif %}
+            <li class="breadcrumb-item text-secondary" aria-current="page">
+              {% if title_name %}{{ title_name }}{% endif %}
+            </li>
+          </ol>
+          <!-- Breadcrumb end -->
+        </div>
+        <!-- App Hero header ends -->
 
-          <!-- App body starts -->
-          <div class="app-body">
+        <!-- App body starts -->
+        <div class="app-body">
+          <div style="position: relative;">
             {% if messages %} {% for message in messages %}
             <!-- Message-display -->
-            <div
-              id="messages"
-              class="alert alert-{{message.tags}} alert-dismissible fade show"
-              role="alert"
-            >
+            <div id="messages" class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert"
+              style="position: fixed; top: 0; left: 50%; transform: translateX(-50%); z-index: 1000;">
               {{message}}
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close"
-              ></button>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <!-- End Message-display -->
             {% endfor %} {% endif %} {% block content %} {% endblock content %}
           </div>
-          <!-- App body ends -->
-
-          <!-- App footer start -->
-          <div class="app-footer">
-            <span>© HST- Digital 2024</span>
-          </div>
-          <!-- App footer end -->
         </div>
-        <!-- App container ends -->
-      </div>
-      <!-- Main container end -->
-    </div>
-    <!-- Page wrapper end -->
+        <!-- App body ends -->
 
-    <!-- *************
+        <!-- App footer start -->
+        <div class="app-footer">
+          <span>© HST- Digital 2024</span>
+        </div>
+        <!-- App footer end -->
+      </div>
+      <!-- App container ends -->
+    </div>
+    <!-- Main container end -->
+  </div>
+  <!-- Page wrapper end -->
+
+  <!-- *************
 			************ JavaScript Files *************
 		************* -->
-    <!-- Required jQuery first, then Bootstrap Bundle JS -->
-    <script src="{% static 'assets/js/jquery.min.js' %}"></script>
-    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'assets/js/moment.min.js' %}"></script>
+  <!-- Required jQuery first, then Bootstrap Bundle JS -->
+  <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/moment.min.js' %}"></script>
 
-    <!-- *************
+  <!-- *************
 			************ Vendor Js Files *************
 		************* -->
 
-    <!-- Overlay Scroll JS -->
-    <script src="{% static 'assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js' %}"></script>
-    <script src="{% static 'assets/vendor/overlay-scroll/custom-scrollbar.js' %}"></script>
+  <!-- Overlay Scroll JS -->
+  <script src="{% static 'assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/overlay-scroll/custom-scrollbar.js' %}"></script>
 
-    <!-- Apex Charts -->
-    <script src="{% static 'assets/vendor/apex/apexcharts.min.js' %}"></script>
-    <script src="{% static 'assets/vendor/apex/custom/dash1/visitors.js' %}"></script>
-    <script src="{% static 'assets/vendor/apex/custom/dash1/sales.js' %}"></script>
-    <script src="{% static 'assets/vendor/apex/custom/dash1/sparkline.js' %}"></script>
-    <script src="{% static 'assets/vendor/apex/custom/dash1/tasks.js' %}"></script>
-    <script src="{% static 'assets/vendor/apex/custom/dash1/income.js' %}"></script>
+  <!-- Apex Charts -->
+  <script src="{% static 'assets/vendor/apex/apexcharts.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/apex/custom/dash1/visitors.js' %}"></script>
+  <script src="{% static 'assets/vendor/apex/custom/dash1/sales.js' %}"></script>
+  <script src="{% static 'assets/vendor/apex/custom/dash1/sparkline.js' %}"></script>
+  <script src="{% static 'assets/vendor/apex/custom/dash1/tasks.js' %}"></script>
+  <script src="{% static 'assets/vendor/apex/custom/dash1/income.js' %}"></script>
 
-    <!-- Custom JS files -->
-    <script src="{% static 'assets/js/custom.js' %}"></script>
-    <script src="{% static 'assets/js/todays-date.js' %}"></script>
-  </body>
+  <!-- Custom JS files -->
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+  <script src="{% static 'assets/js/todays-date.js' %}"></script>
+</body>
+
 </html>
