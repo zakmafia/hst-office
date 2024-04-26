@@ -3,9 +3,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.conf.urls.static import static
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.index, name='index'),
     path('accounts/', include('accounts.urls')),
     path('room-booking/', include('hst_meeting_room_booking.urls')),
     path('help-desk/', include('hst_help_desk.urls')),

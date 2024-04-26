@@ -27,6 +27,7 @@ class Ticket(models.Model):
     requester = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     status = models.CharField(
         max_length=200, choices=STATUS_TYPES, null=True, blank=True, default='in_progress')
+    checked = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     

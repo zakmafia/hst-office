@@ -1,0 +1,676 @@
+{% extends 'helpdesk/main.html' %} {% block content %}
+<!-- Row start -->
+<div class="row gx-3">
+    <div class="col-xxl-12">
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="custom-tabs-container">
+                    <ul class="nav nav-tabs" id="customTabUserRequest" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="tab-one" data-bs-toggle="tab" href="#one" role="tab"
+                                aria-controls="one" aria-selected="true">Current Requests</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="tab-two" data-bs-toggle="tab" href="#two" role="tab"
+                                aria-controls="two" aria-selected="false">Checked Requests</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="tab-three" data-bs-toggle="tab" href="#three" role="tab"
+                                aria-controls="three" aria-selected="false">Addressed Requests</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="customTabContent">
+                        <div class="tab-pane fade show active" id="one" role="tabpanel">
+                            <div class="col-xxl-12 col-sm-6 col-12">
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                                <h5 class="card-title">Current Requests</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="scroll350 my-4">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped m-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Issue</th>
+                                                            <th>Issue Types</th>
+                                                            <th>Created On</th>
+                                                            <th>Checked</th>
+                                                            <th>Requester</th>
+                                                            <th>Status</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for ticket in tickets %}
+                                                        <form action="" method="POST" onsubmit="ticketCheckedLoader()">
+                                                            {% csrf_token %}
+                                                            <tr>
+                                                                <td>
+                                                                    {{ticket.issue}}
+                                                                </td>
+                                                                <td>{{ticket.issue_types}}</td>
+                                                                <td>{{ticket.created_on}}</td>
+                                                                <td>
+                                                                    {% if ticket.checked %}
+                                                                    <div class="badge bg-info bg-opacity-10 text-info">
+                                                                        Yes
+                                                                    </div>
+                                                                    {% else %}
+                                                                    <div
+                                                                        class="badge bg-danger bg-opacity-10 text-danger">
+                                                                        No
+                                                                    </div>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td>
+                                                                    {{ticket.requester}} {%if user.role == 'manager'%}
+
+                                                                    <div
+                                                                        class="badge bg-success bg-opacity-10 text-success">
+                                                                        TP
+                                                                    </div>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td>
+                                                                    {% if ticket.status == 'in_progress' %}
+                                                                    <div class="badge bg-info bg-opacity-10 text-info">
+                                                                        {{ticket.status}}
+                                                                    </div>
+                                                                    {% elif ticket.status == 'solved' %}
+                                                                    <div
+                                                                        class="badge bg-success bg-opacity-10 text-success">
+                                                                        {{ticket.status}}
+                                                                    </div>
+                                                                    {% else %}
+                                                                    <div
+                                                                        class="badge bg-danger bg-opacity-10 text-danger">
+                                                                        {{ticket.status}}
+                                                                    </div>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td><a class="btn btn-info btn-sm"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#exampleModalCenterUserRequest-{{ticket.id}}"
+                                                                        data-id="{{ticket.id}}"><i
+                                                                            class="bi bi-eye-fill"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                            <!-- Modal -->
+                                                            <div class="modal fade"
+                                                                id="exampleModalCenterUserRequest-{{ticket.id}}"
+                                                                tabindex="-1" aria-labelledby="exampleModalCenterTitle"
+                                                                aria-hidden="true">
+                                                                <div class="modal-dialog modal-dialog-centered">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title"
+                                                                                id="exampleModalCenterTitle">
+                                                                                {{ticket.issue}}
+                                                                            </h5>
+                                                                            <button type="button" class="btn-close"
+                                                                                data-bs-dismiss="modal"
+                                                                                aria-label="Close"></button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <div id="ticket_checked_spinner" class="text-center" style="display: none">
+                                                                                <div class="spinner-border" role="status">
+                                                                                  <span class="visually-hidden">Loading...</span>
+                                                                                </div>
+                                                                              </div>
+                                                                            <!-- Row start -->
+                                                                            <div class="row gx-3 scroll350">
+                                                                                <div class="col-lg-12 col-sm-4 col-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label
+                                                                                            class="form-label">Issue</label>
+                                                                                        <input type="text" disabled
+                                                                                            class="form-control"
+                                                                                            value="{{ ticket.issue }}">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-lg-12 col-sm-4 col-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Issue
+                                                                                            Type</label>
+                                                                                        <input type="text" disabled
+                                                                                            class="form-control"
+                                                                                            value="{{ticket.issue_types}}">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-lg-12 col-sm-4 col-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Issue
+                                                                                            Detail</label>
+                                                                                        <textarea class="form-control"
+                                                                                            disabled cols="30"
+                                                                                            rows="8">{{ticket.issue_detail}}</textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-lg-12 col-sm-4 col-12">
+                                                                                    <div class="mb-3">
+                                                                                        <figure>
+                                                                                            <figcaption
+                                                                                                class="form-label">Issue
+                                                                                                Image</figcaption>
+                                                                                            <a href="{{ ticket.image.url }}"
+                                                                                                target="_blank">
+                                                                                                <img src="{{ ticket.image.url }}"
+                                                                                                    alt="" width="150" height="150">
+                                                                                            </a>
+                                                                                        </figure>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-lg-12 col-sm-4 col-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label
+                                                                                            class="form-label">Requester</label>
+                                                                                        <input type="text" disabled
+                                                                                            class="form-control"
+                                                                                            value="{{ticket.requester}}">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-lg-12 col-sm-4 col-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label
+                                                                                            class="form-label">Status</label>
+                                                                                            <br />
+                                                                                        {% if ticket.status == 'in_progress' %}
+                                                                                        <div
+                                                                                            class="badge bg-info bg-opacity-10 text-info">
+                                                                                            {{ticket.status}}
+                                                                                        </div>
+                                                                                        {% elif ticket.status == 'solved' %}
+                                                                                        <div
+                                                                                            class="badge bg-success bg-opacity-10 text-success">
+                                                                                            {{ticket.status}}
+                                                                                        </div>
+                                                                                        {% else %}
+                                                                                        <div
+                                                                                            class="badge bg-danger bg-opacity-10 text-danger">
+                                                                                            {{ticket.status}}
+                                                                                        </div>
+                                                                                        {% endif %}
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-lg-12 col-sm-4 col-12">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Checked</label>
+                                                                                        <br />
+                                                                                        {% if ticket.checked %}
+                                                                                        <div class="badge bg-info bg-opacity-10 text-info">
+                                                                                            Yes
+                                                                                        </div>
+                                                                                        {% else %}
+                                                                                        <div class="badge bg-danger bg-opacity-10 text-danger">
+                                                                                            No
+                                                                                        </div>
+                                                                                        {% endif %}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- Row end -->
+                                                                        </div>
+
+                                                                        <input type="hidden" name="user_ticket_id"
+                                                                            value="{{ticket.id}}" />
+                                                                        <div class="modal-footer">
+                                                                            <button type="button"
+                                                                                class="btn btn-secondary"
+                                                                                data-bs-dismiss="modal">
+                                                                                Close
+                                                                            </button>
+                                                                            <button type="submit" name="request_checked"
+                                                                                class="btn btn-primary">
+                                                                                Checked
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!--End Modal-->
+                                                        </form>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="two" role="tabpanel">
+                            <div class="col-xxl-12 col-sm-6 col-12">
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                                <h5 class="card-title">Checked Requests</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="scroll350 my-4">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped m-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Issue</th>
+                                                            <th>Issue Types</th>
+                                                            <th>Created On</th>
+                                                            <th>Checked</th>
+                                                            <th>Requester</th>
+                                                            <th>Status</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for ticket in checked_tickets %}
+                                                        <tr>
+                                                            <td>
+                                                                {{ticket.issue}}
+                                                            </td>
+                                                            <td>{{ticket.issue_types}}</td>
+                                                            <td>{{ticket.created_on}}</td>
+                                                            <td>
+                                                                {% if ticket.checked %}
+                                                                <div class="badge bg-info bg-opacity-10 text-info">
+                                                                    Yes
+                                                                </div>
+                                                                {% else %}
+                                                                <div class="badge bg-danger bg-opacity-10 text-danger">
+                                                                    No
+                                                                </div>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                {{ticket.requester}} {%if user.role == 'manager'%}
+
+                                                                <div
+                                                                    class="badge bg-success bg-opacity-10 text-success">
+                                                                    TP
+                                                                </div>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                {% if ticket.status == 'in_progress' %}
+                                                                <div class="badge bg-info bg-opacity-10 text-info">
+                                                                    {{ticket.status}}
+                                                                </div>
+                                                                {% elif ticket.status == 'solved' %}
+                                                                <div
+                                                                    class="badge bg-success bg-opacity-10 text-success">
+                                                                    {{ticket.status}}
+                                                                </div>
+                                                                {% else %}
+                                                                <div class="badge bg-danger bg-opacity-10 text-danger">
+                                                                    {{ticket.status}}
+                                                                </div>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td><a class="btn btn-info btn-sm"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#exampleModalCenterUserRequestChecked-{{ticket.id}}"
+                                                                data-id="{{ticket.id}}"><i
+                                                                    class="bi bi-eye-fill"></i>
+                                                            </a></td>
+                                                        </tr>
+                                                        <!-- Modal -->
+                                                        <div class="modal fade"
+                                                        id="exampleModalCenterUserRequestChecked-{{ticket.id}}"
+                                                        tabindex="-1" aria-labelledby="exampleModalCenterTitle"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title"
+                                                                        id="exampleModalCenterTitle">
+                                                                        {{ticket.issue}}
+                                                                    </h5>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <!-- Row start -->
+                                                                    <div class="row gx-3 scroll350">
+                                                                        <div class="col-lg-12 col-sm-4 col-12">
+                                                                            <div class="mb-3">
+                                                                                <label
+                                                                                    class="form-label">Issue</label>
+                                                                                <input type="text" disabled
+                                                                                    class="form-control"
+                                                                                    value="{{ ticket.issue }}">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12 col-sm-4 col-12">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label">Issue
+                                                                                    Type</label>
+                                                                                <input type="text" disabled
+                                                                                    class="form-control"
+                                                                                    value="{{ticket.issue_types}}">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12 col-sm-4 col-12">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label">Issue
+                                                                                    Detail</label>
+                                                                                <textarea class="form-control"
+                                                                                    disabled cols="30"
+                                                                                    rows="8">{{ticket.issue_detail}}</textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12 col-sm-4 col-12">
+                                                                            <div class="mb-3">
+                                                                                <figure>
+                                                                                    <figcaption
+                                                                                        class="form-label">Issue
+                                                                                        Image</figcaption>
+                                                                                    <a href="{{ ticket.image.url }}"
+                                                                                        target="_blank">
+                                                                                        <img src="{{ ticket.image.url }}"
+                                                                                            alt="" width="150" height="150">
+                                                                                    </a>
+                                                                                </figure>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12 col-sm-4 col-12">
+                                                                            <div class="mb-3">
+                                                                                <label
+                                                                                    class="form-label">Requester</label>
+                                                                                <input type="text" disabled
+                                                                                    class="form-control"
+                                                                                    value="{{ticket.requester}}">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12 col-sm-4 col-12">
+                                                                            <div class="mb-3">
+                                                                                <label
+                                                                                    class="form-label">Status</label>
+                                                                                    <br />
+                                                                                {% if ticket.status == 'in_progress' %}
+                                                                                <div
+                                                                                    class="badge bg-info bg-opacity-10 text-info">
+                                                                                    {{ticket.status}}
+                                                                                </div>
+                                                                                {% elif ticket.status == 'solved' %}
+                                                                                <div
+                                                                                    class="badge bg-success bg-opacity-10 text-success">
+                                                                                    {{ticket.status}}
+                                                                                </div>
+                                                                                {% else %}
+                                                                                <div
+                                                                                    class="badge bg-danger bg-opacity-10 text-danger">
+                                                                                    {{ticket.status}}
+                                                                                </div>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12 col-sm-4 col-12">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label">Checked</label>
+                                                                                <br />
+                                                                                {% if ticket.checked %}
+                                                                                <div class="badge bg-info bg-opacity-10 text-info">
+                                                                                    Yes
+                                                                                </div>
+                                                                                {% else %}
+                                                                                <div class="badge bg-danger bg-opacity-10 text-danger">
+                                                                                    No
+                                                                                </div>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- Row end -->
+                                                                </div>
+
+                                                                <input type="hidden" name="user_ticket_id"
+                                                                    value="{{ticket.id}}" />
+                                                                <div class="modal-footer">
+                                                                    <button type="button"
+                                                                        class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">
+                                                                        Close
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                        <!--End Modal-->
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="three" role="tabpanel">
+                            <div class="col-xxl-12 col-sm-6 col-12">
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                                <h5 class="card-title">Addressed Requests</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="scroll350 my-4">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped m-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Issue</th>
+                                                            <th>Issue Types</th>
+                                                            <th>Created On</th>
+                                                            <th>Checked</th>
+                                                            <th>Requester</th>
+                                                            <th>Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for ticket in addressed_tickets %}
+                                                        <tr>
+                                                            <td>
+                                                                {{ticket.issue}}
+                                                            </td>
+                                                            <td>{{ticket.issue_types}}</td>
+                                                            <td>{{ticket.created_on}}</td>
+                                                            <td>
+                                                                {% if ticket.checked %}
+                                                                <div class="badge bg-info bg-opacity-10 text-info">
+                                                                    Yes
+                                                                </div>
+                                                                {% else %}
+                                                                <div class="badge bg-danger bg-opacity-10 text-danger">
+                                                                    No
+                                                                </div>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                {{ticket.requester}} {%if user.role == 'manager'%}
+
+                                                                <div
+                                                                    class="badge bg-success bg-opacity-10 text-success">
+                                                                    TP
+                                                                </div>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                {% if ticket.status == 'in_progress' %}
+                                                                <div class="badge bg-info bg-opacity-10 text-info">
+                                                                    {{ticket.status}}
+                                                                </div>
+                                                                {% elif ticket.status == 'solved' %}
+                                                                <div
+                                                                    class="badge bg-success bg-opacity-10 text-success">
+                                                                    {{ticket.status}}
+                                                                </div>
+                                                                {% else %}
+                                                                <div class="badge bg-danger bg-opacity-10 text-danger">
+                                                                    {{ticket.status}}
+                                                                </div>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td><a class="btn btn-info btn-sm"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#exampleModalCenterUserRequestAddressed-{{ticket.id}}"
+                                                                data-id="{{ticket.id}}"><i
+                                                                    class="bi bi-eye-fill"></i>
+                                                            </a></td>
+                                                        </tr>
+                                                        <!-- Modal -->
+                                                        <div class="modal fade"
+                                                        id="exampleModalCenterUserRequestAddressed-{{ticket.id}}"
+                                                        tabindex="-1" aria-labelledby="exampleModalCenterTitle"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title"
+                                                                        id="exampleModalCenterTitle">
+                                                                        {{ticket.issue}}
+                                                                    </h5>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <!-- Row start -->
+                                                                    <div class="row gx-3 scroll350">
+                                                                        <div class="col-lg-12 col-sm-4 col-12">
+                                                                            <div class="mb-3">
+                                                                                <label
+                                                                                    class="form-label">Issue</label>
+                                                                                <input type="text" disabled
+                                                                                    class="form-control"
+                                                                                    value="{{ ticket.issue }}">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12 col-sm-4 col-12">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label">Issue
+                                                                                    Type</label>
+                                                                                <input type="text" disabled
+                                                                                    class="form-control"
+                                                                                    value="{{ticket.issue_types}}">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12 col-sm-4 col-12">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label">Issue
+                                                                                    Detail</label>
+                                                                                <textarea class="form-control"
+                                                                                    disabled cols="30"
+                                                                                    rows="8">{{ticket.issue_detail}}</textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12 col-sm-4 col-12">
+                                                                            <div class="mb-3">
+                                                                                <figure>
+                                                                                    <figcaption
+                                                                                        class="form-label">Issue
+                                                                                        Image</figcaption>
+                                                                                    <a href="{{ ticket.image.url }}"
+                                                                                        target="_blank">
+                                                                                        <img src="{{ ticket.image.url }}"
+                                                                                            alt="" width="150" height="150">
+                                                                                    </a>
+                                                                                </figure>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12 col-sm-4 col-12">
+                                                                            <div class="mb-3">
+                                                                                <label
+                                                                                    class="form-label">Requester</label>
+                                                                                <input type="text" disabled
+                                                                                    class="form-control"
+                                                                                    value="{{ticket.requester}}">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12 col-sm-4 col-12">
+                                                                            <div class="mb-3">
+                                                                                <label
+                                                                                    class="form-label">Status</label>
+                                                                                    <br />
+                                                                                {% if ticket.status == 'in_progress' %}
+                                                                                <div
+                                                                                    class="badge bg-info bg-opacity-10 text-info">
+                                                                                    {{ticket.status}}
+                                                                                </div>
+                                                                                {% elif ticket.status == 'solved' %}
+                                                                                <div
+                                                                                    class="badge bg-success bg-opacity-10 text-success">
+                                                                                    {{ticket.status}}
+                                                                                </div>
+                                                                                {% else %}
+                                                                                <div
+                                                                                    class="badge bg-danger bg-opacity-10 text-danger">
+                                                                                    {{ticket.status}}
+                                                                                </div>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12 col-sm-4 col-12">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label">Checked</label>
+                                                                                <br />
+                                                                                {% if ticket.checked %}
+                                                                                <div class="badge bg-info bg-opacity-10 text-info">
+                                                                                    Yes
+                                                                                </div>
+                                                                                {% else %}
+                                                                                <div class="badge bg-danger bg-opacity-10 text-danger">
+                                                                                    No
+                                                                                </div>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- Row end -->
+                                                                </div>
+
+                                                                <input type="hidden" name="user_ticket_id"
+                                                                    value="{{ticket.id}}" />
+                                                                <div class="modal-footer">
+                                                                    <button type="button"
+                                                                        class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">
+                                                                        Close
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                        <!--End Modal-->
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                                {% include 'pagination.html' with queryset=addressed_tickets custom_range=custom_range %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function ticketCheckedLoader() {
+      document.getElementById("ticket_checked_spinner").style.display = "block"
+    }
+</script>
+{% endblock content %}

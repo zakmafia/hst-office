@@ -1,0 +1,13 @@
+{% autoescape off %}
+Dear {{ requester }},
+Your ticket has been successfully submitted. Here are the details:
+- Issue: {{ issue }}
+- Issue Types: {{ issue_types }}
+- Issue Detail: {{ issue_detail }}
+- Site Link: http://{{domain}}{%url 'my_requests'%}
+
+We will review your ticket and get back to you as soon as possible.
+Thank you for reaching out!
+Sincerely,
+HST Help Desk Team
+{% endautoescape %}

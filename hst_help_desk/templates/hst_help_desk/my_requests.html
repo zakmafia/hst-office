@@ -10,43 +10,30 @@
             <h5 class="m-0">My Requests</h5>
           </div>
           <div class="col-12 col-md-auto">
-            <a
-              href="#"
-              class="btn btn-outline-primary"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModalCenterTitleCreateRequest"
-            >
-              Create Request +</a
-            >
+            <a href="#" class="btn btn-outline-primary" data-bs-toggle="modal"
+              data-bs-target="#exampleModalCenterTitleCreateRequest">
+              Create Request +</a>
           </div>
         </div>
         <!-- Row end -->
         <!-- Modal -->
-        <div
-          class="modal fade"
-          id="exampleModalCenterTitleCreateRequest"
-          tabindex="-1"
-          aria-labelledby="exampleModalCenterTitleCreateRequest"
-          aria-hidden="true"
-        >
+        <div class="modal fade" id="exampleModalCenterTitleCreateRequest" tabindex="-1"
+          aria-labelledby="exampleModalCenterTitleCreateRequest" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5
-                  class="modal-title"
-                  id="exampleModalCenterTitleCreateRequest"
-                >
+                <h5 class="modal-title" id="exampleModalCenterTitleCreateRequest">
                   Create Request +
                 </h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-              <form action="" method="POST">
+              <form action="" id="create_ticket_form" method="POST" onsubmit="createTicketLoader()" enctype="multipart/form-data">
                 <div class="modal-body">
+                  <div id="create_ticket_spinner" class="text-center" style="display: none">
+                    <div class="spinner-border" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </div>
                   <!-- Row start -->
                   <div class="row gx-3">
                     {% csrf_token %}
@@ -78,18 +65,10 @@
                   <!-- Row end -->
                 </div>
                 <div class="modal-footer">
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                  >
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     Close
                   </button>
-                  <button
-                    type="submit"
-                    name="add_a_room"
-                    class="btn btn-primary"
-                  >
+                  <button type="submit" id="id_create_a_ticket" name="create_a_ticket" class="btn btn-primary">
                     Create Request
                   </button>
                 </div>
@@ -111,28 +90,12 @@
         <div class="custom-tabs-container">
           <ul class="nav nav-tabs" id="customTabMyRequest" role="tablist">
             <li class="nav-item" role="presentation">
-              <a
-                class="nav-link active"
-                id="tab-one"
-                data-bs-toggle="tab"
-                href="#one"
-                role="tab"
-                aria-controls="one"
-                aria-selected="true"
-                >My Requests</a
-              >
+              <a class="nav-link active" id="tab-one" data-bs-toggle="tab" href="#one" role="tab" aria-controls="one"
+                aria-selected="true">My Requests</a>
             </li>
             <li class="nav-item" role="presentation">
-              <a
-                class="nav-link"
-                id="tab-two"
-                data-bs-toggle="tab"
-                href="#two"
-                role="tab"
-                aria-controls="two"
-                aria-selected="false"
-                >Past Request History</a
-              >
+              <a class="nav-link" id="tab-two" data-bs-toggle="tab" href="#two" role="tab" aria-controls="two"
+                aria-selected="false">Addressed Requests</a>
             </li>
           </ul>
           <div class="tab-content" id="customTabContent">
@@ -155,39 +118,222 @@
                               <th>Issue</th>
                               <th>Issue Types</th>
                               <th>Created On</th>
+                              <th>Checked</th>
                               <th>Status</th>
+                              <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
                             {% for ticket in tickets %}
-
-                            <tr>
-                              <td><a href="#">{{ticket.issue}}</a></td>
-                              <td>{{ticket.issue_types}}</td>
-                              <td>{{ticket.created_on}}</td>
-                              <td>
-                                {% if ticket.status == 'in_progress' %}
-                                <div
-                                  class="badge bg-info bg-opacity-10 text-info"
-                                >
-                                  {{ticket.status}}
-                                </div>
-                                {% elif ticket.status == 'solved' %}
-                                <div
-                                  class="badge bg-success bg-opacity-10 text-success"
-                                >
-                                  {{ticket.status}}
-                                </div>
-                                {% else %}
-                                <div
-                                  class="badge bg-danger bg-opacity-10 text-danger"
-                                >
-                                  {{ticket.status}}
-                                </div>
+                            <form action="" method="POST" onsubmit="statusUpdateLoader()">
+                              {% csrf_token %}
+                              <tr>
+                                <td>{{ticket.issue}}</td>
+                                <td>{{ticket.issue_types}}</td>
+                                <td>{{ticket.created_on}}</td>
+                                <td>
+                                  {% if ticket.checked %}
+                                  <div class="badge bg-info bg-opacity-10 text-info">
+                                    Yes
+                                  </div>
+                                  {% else %}
+                                  <div class="badge bg-danger bg-opacity-10 text-danger">
+                                    No
+                                  </div>
+                                  {% endif %}
+                                </td>
+                                <td>
+                                  {% if ticket.status == 'in_progress' %}
+                                  <div class="badge bg-info bg-opacity-10 text-info">
+                                    {{ticket.status}}
+                                  </div>
+                                  {% elif ticket.status == 'solved' %}
+                                  <div class="badge bg-success bg-opacity-10 text-success">
+                                    {{ticket.status}}
+                                  </div>
+                                  {% else %}
+                                  <div class="badge bg-danger bg-opacity-10 text-danger">
+                                    {{ticket.status}}
+                                  </div>
+                                  {% endif %}
+                                </td>
+                                <td>
+                                <a class="btn btn-primary btn-icon btn-sm" data-bs-toggle="modal"
+                                  data-bs-target="#exampleModalCenterMyRequestDetail-{{ticket.id}}" data-id="{{ticket.id}}" href="#"><i
+                                    class="bi bi-eye-fill"></i>
+                                </a>
+                                {% if ticket.checked %}
+                                <a class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                  data-bs-target="#exampleModalCenterMyRequest-{{ticket.id}}"
+                                  data-id="{{ticket.id}}" href="#"><i class="bi bi-emoji-smile-fill"></i>
+                                </a>
                                 {% endif %}
                               </td>
-                            </tr>
+                              </tr>
+                              <!-- Approve Modal -->
+                              <div class="modal fade" id="exampleModalCenterMyRequest-{{ticket.id}}" tabindex="-1"
+                                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalCenterTitle">
+                                        Is your issue sovled?
+                                      </h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <div id="status_update_spinner" class="text-center" style="display: none">
+                                        <div class="spinner-border" role="status">
+                                          <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                      </div>
+                                      <label class="form-label">Status</label>
+                                      <select name="request_status_value" class="form-select"
+                                        aria-label="Request Status">
+                                        <option value="solved">Solved</option>
+                                        <option value="not_solved">Not Solved</option>
+                                      </select>
+                                    </div>
 
+                                    <input type="hidden" name="my_ticket_id" value="{{ticket.id}}" />
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        Close
+                                      </button>
+                                      <button type="submit" name="request_status_button" class="btn btn-primary">
+                                        Confirm
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--End Modal-->
+                            </form>
+                            <!-- Detail Modal -->
+                            <div class="modal fade"
+                            id="exampleModalCenterMyRequestDetail-{{ticket.id}}"
+                            tabindex="-1" aria-labelledby="exampleModalCenterTitle"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"
+                                            id="exampleModalCenterTitle">
+                                            {{ticket.issue}}
+                                        </h5>
+                                        <button type="button" class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Row start -->
+                                        <div class="row gx-3 scroll350">
+                                            <div class="col-lg-12 col-sm-4 col-12">
+                                                <div class="mb-3">
+                                                    <label
+                                                        class="form-label">Issue</label>
+                                                    <input type="text" disabled
+                                                        class="form-control"
+                                                        value="{{ ticket.issue }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 col-sm-4 col-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Issue
+                                                        Type</label>
+                                                    <input type="text" disabled
+                                                        class="form-control"
+                                                        value="{{ticket.issue_types}}">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 col-sm-4 col-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Issue
+                                                        Detail</label>
+                                                    <textarea class="form-control"
+                                                        disabled cols="30"
+                                                        rows="8">{{ticket.issue_detail}}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 col-sm-4 col-12">
+                                                <div class="mb-3">
+                                                    <figure>
+                                                        <figcaption
+                                                            class="form-label">Issue
+                                                            Image</figcaption>
+                                                        <a href="{{ ticket.image.url }}"
+                                                            target="_blank">
+                                                            <img src="{{ ticket.image.url }}"
+                                                                alt="" width="150" height="150">
+                                                        </a>
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 col-sm-4 col-12">
+                                                <div class="mb-3">
+                                                    <label
+                                                        class="form-label">Requester</label>
+                                                    <input type="text" disabled
+                                                        class="form-control"
+                                                        value="{{ticket.requester}}">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 col-sm-4 col-12">
+                                                <div class="mb-3">
+                                                    <label
+                                                        class="form-label">Status</label>
+                                                        <br />
+                                                    {% if ticket.status == 'in_progress' %}
+                                                    <div
+                                                        class="badge bg-info bg-opacity-10 text-info">
+                                                        {{ticket.status}}
+                                                    </div>
+                                                    {% elif ticket.status == 'solved' %}
+                                                    <div
+                                                        class="badge bg-success bg-opacity-10 text-success">
+                                                        {{ticket.status}}
+                                                    </div>
+                                                    {% else %}
+                                                    <div
+                                                        class="badge bg-danger bg-opacity-10 text-danger">
+                                                        {{ticket.status}}
+                                                    </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 col-sm-4 col-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Checked</label>
+                                                    <br />
+                                                    {% if ticket.checked %}
+                                                    <div class="badge bg-info bg-opacity-10 text-info">
+                                                        Yes
+                                                    </div>
+                                                    {% else %}
+                                                    <div class="badge bg-danger bg-opacity-10 text-danger">
+                                                        No
+                                                    </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Row end -->
+                                    </div>
+
+                                    <input type="hidden" name="user_ticket_id"
+                                        value="{{ticket.id}}" />
+                                    <div class="modal-footer">
+                                        <button type="button"
+                                            class="btn btn-secondary"
+                                            data-bs-dismiss="modal">
+                                            Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <!--End Modal-->
                             {% endfor %}
                           </tbody>
                         </table>
@@ -205,17 +351,7 @@
                       {% csrf_token %}
                       <div class="row align-items-center">
                         <div class="col">
-                          <h5 class="card-title">My Past Bookings History</h5>
-                        </div>
-
-                        <div class="col-12 col-md-auto">
-                          <button
-                            name="clear_booking_history"
-                            class="btn btn-outline-danger"
-                            type="submit"
-                          >
-                            Clear History
-                          </button>
+                          <h5 class="card-title">Addressed Requests</h5>
                         </div>
                       </div>
                     </form>
@@ -226,94 +362,182 @@
                         <table class="table table-striped m-0">
                           <thead>
                             <tr>
-                              <th>Name of Booking</th>
-                              <th>Room</th>
-                              <th>Room Location</th>
-                              <th>From Date</th>
-                              <th>To Date</th>
-                              <th>From Time</th>
-                              <th>To Time</th>
+                              <th>Issue</th>
+                              <th>Issue Types</th>
+                              <th>Created On</th>
+                              <th>Checked</th>
+                              <th>Status</th>
                               <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
-                            {% for booking in my_bookings_history %}
+                            {% for ticket in addressed_tickets %}
                             <form action="" method="POST">
                               {% csrf_token %}
                               <tr>
-                                <td>{{booking.name}}</td>
-                                <td>{{booking.room.name}}</td>
-                                <td>{{booking.room.address}}</td>
-                                <td>{{booking.from_date}}</td>
-                                <td>{{booking.to_date}}</td>
-                                <td>{{booking.from_time}}</td>
-                                <td>{{booking.to_time}}</td>
+                                <td>{{ticket.issue}}</td>
+                                <td>{{ticket.issue_types}}</td>
+                                <td>{{ticket.created_on}}</td>
                                 <td>
-                                  <a
-                                    href="#"
-                                    id="cancel_booking_link"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#exampleModalCenterMyBookingRemove-{{booking.id}}"
-                                    data-id="{{booking.id}}"
-                                    >Remove Booking</a
-                                  >
-                                </td>
-                              </tr>
-                              <!-- Modal -->
-                              <div
-                                class="modal fade"
-                                id="exampleModalCenterMyBookingRemove-{{booking.id}}"
-                                tabindex="-1"
-                                aria-labelledby="exampleModalCenterTitle"
-                                aria-hidden="true"
-                              >
-                                <div class="modal-dialog modal-dialog-centered">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h5
-                                        class="modal-title"
-                                        id="exampleModalCenterTitle"
-                                      >
-                                        Are you sure you want to remove the
-                                        booking?
-                                      </h5>
-                                      <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="modal"
-                                        aria-label="Close"
-                                      ></button>
-                                    </div>
-
-                                    <input
-                                      type="hidden"
-                                      name="my_booking_id"
-                                      value="{{booking.id}}"
-                                    />
-                                    <div class="modal-footer">
-                                      <button
-                                        type="button"
-                                        class="btn btn-secondary"
-                                        data-bs-dismiss="modal"
-                                      >
-                                        Close
-                                      </button>
-                                      <button
-                                        type="submit"
-                                        name="remove_my_booking"
-                                        class="btn btn-primary"
-                                      >
-                                        Remove Booking
-                                      </button>
-                                    </div>
+                                  {% if ticket.checked %}
+                                  <div class="badge bg-info bg-opacity-10 text-info">
+                                    Yes
                                   </div>
-                                </div>
+                                  {% else %}
+                                  <div class="badge bg-danger bg-opacity-10 text-danger">
+                                    No
+                                  </div>
+                                  {% endif %}
+                                </td>
+                                <td>
+                                  {% if ticket.status == 'in_progress' %}
+                                  <div class="badge bg-info bg-opacity-10 text-info">
+                                    {{ticket.status}}
+                                  </div>
+                                  {% elif ticket.status == 'solved' %}
+                                  <div class="badge bg-success bg-opacity-10 text-success">
+                                    {{ticket.status}}
+                                  </div>
+                                  {% else %}
+                                  <div class="badge bg-danger bg-opacity-10 text-danger">
+                                    {{ticket.status}}
+                                  </div>
+                                  {% endif %}
+                                </td>
+                                <td><a class="btn btn-primary btn-icon btn-sm" data-bs-toggle="modal"
+                                  data-bs-target="#exampleModalCenterMyRequestDetailAddressed-{{ticket.id}}" data-id="{{ticket.id}}" href="#"><i
+                                    class="bi bi-eye-fill"></i>
+                                </a></td>
+                              </tr>
+                              <!-- Detail Modal -->
+                              <div class="modal fade"
+                              id="exampleModalCenterMyRequestDetailAddressed-{{ticket.id}}"
+                              tabindex="-1" aria-labelledby="exampleModalCenterTitle"
+                              aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered">
+                                  <div class="modal-content">
+                                      <div class="modal-header">
+                                          <h5 class="modal-title"
+                                              id="exampleModalCenterTitle">
+                                              {{ticket.issue}}
+                                          </h5>
+                                          <button type="button" class="btn-close"
+                                              data-bs-dismiss="modal"
+                                              aria-label="Close"></button>
+                                      </div>
+                                      <div class="modal-body">
+                                          <!-- Row start -->
+                                          <div class="row gx-3 scroll350">
+                                              <div class="col-lg-12 col-sm-4 col-12">
+                                                  <div class="mb-3">
+                                                      <label
+                                                          class="form-label">Issue</label>
+                                                      <input type="text" disabled
+                                                          class="form-control"
+                                                          value="{{ ticket.issue }}">
+                                                  </div>
+                                              </div>
+                                              <div class="col-lg-12 col-sm-4 col-12">
+                                                  <div class="mb-3">
+                                                      <label class="form-label">Issue
+                                                          Type</label>
+                                                      <input type="text" disabled
+                                                          class="form-control"
+                                                          value="{{ticket.issue_types}}">
+                                                  </div>
+                                              </div>
+                                              <div class="col-lg-12 col-sm-4 col-12">
+                                                  <div class="mb-3">
+                                                      <label class="form-label">Issue
+                                                          Detail</label>
+                                                      <textarea class="form-control"
+                                                          disabled cols="30"
+                                                          rows="8">{{ticket.issue_detail}}</textarea>
+                                                  </div>
+                                              </div>
+                                              <div class="col-lg-12 col-sm-4 col-12">
+                                                  <div class="mb-3">
+                                                      <figure>
+                                                          <figcaption
+                                                              class="form-label">Issue
+                                                              Image</figcaption>
+                                                          <a href="{{ ticket.image.url }}"
+                                                              target="_blank">
+                                                              <img src="{{ ticket.image.url }}"
+                                                                  alt="" width="150" height="150">
+                                                          </a>
+                                                      </figure>
+                                                  </div>
+                                              </div>
+                                              <div class="col-lg-12 col-sm-4 col-12">
+                                                  <div class="mb-3">
+                                                      <label
+                                                          class="form-label">Requester</label>
+                                                      <input type="text" disabled
+                                                          class="form-control"
+                                                          value="{{ticket.requester}}">
+                                                  </div>
+                                              </div>
+                                              <div class="col-lg-12 col-sm-4 col-12">
+                                                  <div class="mb-3">
+                                                      <label
+                                                          class="form-label">Status</label>
+                                                          <br />
+                                                      {% if ticket.status == 'in_progress' %}
+                                                      <div
+                                                          class="badge bg-info bg-opacity-10 text-info">
+                                                          {{ticket.status}}
+                                                      </div>
+                                                      {% elif ticket.status == 'solved' %}
+                                                      <div
+                                                          class="badge bg-success bg-opacity-10 text-success">
+                                                          {{ticket.status}}
+                                                      </div>
+                                                      {% else %}
+                                                      <div
+                                                          class="badge bg-danger bg-opacity-10 text-danger">
+                                                          {{ticket.status}}
+                                                      </div>
+                                                      {% endif %}
+                                                  </div>
+                                              </div>
+                                              <div class="col-lg-12 col-sm-4 col-12">
+                                                  <div class="mb-3">
+                                                      <label class="form-label">Checked</label>
+                                                      <br />
+                                                      {% if ticket.checked %}
+                                                      <div class="badge bg-info bg-opacity-10 text-info">
+                                                          Yes
+                                                      </div>
+                                                      {% else %}
+                                                      <div class="badge bg-danger bg-opacity-10 text-danger">
+                                                          No
+                                                      </div>
+                                                      {% endif %}
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <!-- Row end -->
+                                      </div>
+
+                                      <input type="hidden" name="user_ticket_id"
+                                          value="{{ticket.id}}" />
+                                      <div class="modal-footer">
+                                          <button type="button"
+                                              class="btn btn-secondary"
+                                              data-bs-dismiss="modal">
+                                              Close
+                                          </button>
+                                      </div>
+                                  </div>
+                              </div>
                               </div>
                               <!--End Modal-->
                             </form>
                             {% endfor %}
                           </tbody>
                         </table>
+                        {% include 'pagination.html' with queryset=addressed_tickets custom_range=custom_range %}
                       </div>
                     </div>
                   </div>
@@ -326,4 +550,12 @@
     </div>
   </div>
 </div>
+<script>
+  function createTicketLoader() {
+    document.getElementById("create_ticket_spinner").style.display = "block";
+  }
+  function statusUpdateLoader() {
+    document.getElementById("status_update_spinner").style.display = "block"
+  }
+</script>
 {% endblock content %}

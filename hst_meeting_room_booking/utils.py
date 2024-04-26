@@ -5,6 +5,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.mail import EmailMessage
 
 def is_booking_valid(booking, room):
@@ -58,3 +59,27 @@ def admin_send_cancellation_email(admin_user, booking_info, reason):
     to_email = booking_info.booking_person.email
     email = EmailMessage(mail_subject, message, to=[to_email])
     email.send()
+    
+def paginateBookings(request, bookings, results):
+    page = request.GET.get('page')
+    paginator = Paginator(bookings, results)
+    
+    try:
+        bookings = paginator.page(page)
+    except PageNotAnInteger:
+        page = 1
+        bookings = paginator.page(page)
+    except EmptyPage:
+        page = paginator.num_pages
+        bookings = paginator.page(page)
+    
+    leftIndex = (int(page) - 4)
+    if leftIndex < 1:
+        leftIndex = 1
+    rightIndex = (int(page) + 5)
+    if rightIndex > paginator.num_pages:
+        rightIndex = paginator.num_pages + 1
+        
+    custom_range = range(leftIndex, rightIndex)
+    
+    return custom_range, bookings

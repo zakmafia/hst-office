@@ -2,34 +2,51 @@
 <!-- Row start -->
 <div class="row gx-3">
   <div class="col-xl-6 col-sm-6 col-12">
-    <a href="{% url 'my_requests' %}"
-      ><div class="card mb-3">
+    <div class="card mb-3">
         <div class="card-body">
           <div class="mb-2">
-            <i class="bi bi-bar-chart fs-1 text-primary lh-1"></i>
+            <i class="bi bi-cursor-fill fs-1 text-primary lh-1"></i>
           </div>
           <div class="d-flex align-items-center justify-content-between">
-            <h6 class="m-0 text-secondary fw-normal">My Requests</h6>
-            <h3 class="m-0 text-primary">3500</h3>
-          </div>
-        </div>
-      </div></a
-    >
-  </div>
-  <div class="col-xl-6 col-sm-6 col-12">
-    <a href="{% url 'knowledge_base' %}">
-      <div class="card mb-3">
-        <div class="card-body">
-          <div class="mb-2">
-            <i class="bi bi-bag-check fs-1 text-primary lh-1"></i>
-          </div>
-          <div class="d-flex align-items-center justify-content-between">
-            <h6 class="m-0 text-secondary fw-normal">Knowledge Base</h6>
-            <h3 class="m-0 text-primary">2900</h3>
+            <a href="{% url 'my_requests' %}">
+              <h6 class="m-0 text-secondary fw-normal">My Requests</h6>
+            </a>
+            <h3 class="m-0 text-primary">{{my_requests_counter}}</h3>
           </div>
         </div>
       </div>
-    </a>
+  </div>
+  {% if user.role == 'help_desk_admin' %}
+  <div class="col-xl-6 col-sm-6 col-12">
+    
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="mb-2">
+            <i class="bi bi-cursor fs-1 text-primary lh-1"></i>
+          </div>
+          <div class="d-flex align-items-center justify-content-between">
+            <a href="{% url 'user_requests' %}">
+              <h6 class="m-0 text-secondary fw-normal">User Requests</h6>
+            </a>
+            <h3 class="m-0 text-primary">{{user_requests_counter}}</h3>
+          </div>
+        </div>
+      </div>
+  </div>
+  {% endif %}
+  <div class="col-xl-6 col-sm-6 col-12">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="mb-2">
+            <i class="bi bi-file-font-fill fs-1 text-primary lh-1"></i>
+          </div>
+          <div class="d-flex align-items-center justify-content-between">
+            <a href="{% url 'knowledge_base' %}">
+              <h6 class="m-0 text-secondary fw-normal">Knowledge Base</h6>
+            </a>
+          </div>
+        </div>
+      </div>
   </div>
 </div>
 <!-- Row end -->

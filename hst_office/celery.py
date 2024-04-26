@@ -11,7 +11,7 @@ app = Celery('hst_office')
 app.conf.beat_schedule = {
     'check_booking_status': {
         'task': 'hst_meeting_room_booking.tasks.check_booking_status',  # Task name
-        'schedule': crontab(hour="*/12"),  # Run every 12 hours
+        'schedule': crontab(minute=0, hour="*/12"),  # Run every 12 hours
     },
 }
 

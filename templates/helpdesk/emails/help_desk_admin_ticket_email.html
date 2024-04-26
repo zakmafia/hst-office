@@ -1,0 +1,14 @@
+{% autoescape off %}
+Dear Help Desk Admin,
+A new ticket has been submitted. Here are the details:
+- Issue: {{ issue }}
+- Issue Types: {{ issue_types }}
+- Issue Detail: {{ issue_detail }}
+- Requested By: {{ requester }}
+- Site Link: http://{{domain}}{%url 'user_requests'%}
+
+Please review the ticket and take necessary actions.
+Thank you!
+Sincerely,
+HST Help Desk Team
+{% endautoescape %}

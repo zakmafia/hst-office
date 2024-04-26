@@ -267,6 +267,7 @@
                             {% endfor %}
                           </tbody>
                         </table>
+                        {% include 'pagination.html' with queryset=my_bookings_history custom_range=custom_range %}
                       </div>
                     </div>
                   </div>

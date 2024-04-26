@@ -11,27 +11,29 @@
   <!-- Sidebar menu starts -->
   <div class="sidebarMenuScroll">
     <ul class="sidebar-menu">
-      <li
-        class="{% if title_name == 'Help Desk' %}active current-page{% endif %}"
-      >
+      <li class="{% if title_name == 'Help Desk' %}active current-page{% endif %}">
         <a href="{% url 'help_desk' %}">
-          <i class="bi bi-pie-chart"></i>
+          <i class="bi bi bi-people-fill"></i>
           <span class="menu-text">Help Desk</span>
         </a>
       </li>
-      <li
-        class="{% if title_name == 'My Requests' %}active current-page{% endif %}"
-      >
+      <li class="{% if title_name == 'My Requests' %}active current-page{% endif %}">
         <a href="{% url 'my_requests' %}">
-          <i class="bi bi-box"></i>
+          <i class="bi bi-cursor-fill"></i>
           <span class="menu-text">My Requests</span>
         </a>
       </li>
-      <li
-        class="{% if title_name == 'Knowledge Base' %}active current-page{% endif %}"
-      >
+      {% if user.role == 'help_desk_admin' %}
+      <li class="{% if title_name == 'User Requests' %}active current-page{% endif %}">
+        <a href="{% url 'user_requests' %}">
+          <i class="bi bi-cursor"></i>
+          <span class="menu-text">User Requests</span>
+        </a>
+      </li>
+      {% endif %}
+      <li class="{% if title_name == 'Knowledge Base' %}active current-page{% endif %}">
         <a href="{% url 'knowledge_base' %}">
-          <i class="bi bi-calendar2"></i>
+          <i class="bi bi-file-font-fill"></i>
           <span class="menu-text">Knowledge Base</span>
         </a>
       </li>

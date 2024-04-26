@@ -1,0 +1,15 @@
+Subject: The user has given feedback on the ticket you checked
+
+Dear Help Desk Admin,
+A user has given feedback on the ticket you checked. Here are the details:
+- Issue: {{ issue }}
+- Issue Types: {{ issue_types }}
+- Issue Detail: {{ issue_detail }}
+- Requested By: {{ requester }}
+- Status: {{ status }}
+- Site Link: http://{{domain}}{%url 'user_requests'%} (Check the Addressed Requests Tab)
+
+Please review the feedback provided by the user and take necessary actions.
+Thank you for your attention!
+Sincerely,
+HST Help Desk Team

@@ -1,0 +1,30 @@
+{% load static %}
+<!-- Sidebar wrapper start -->
+<nav id="sidebar" class="sidebar-wrapper">
+  <!-- Sidebar profile starts -->
+  <div class="shop-profile">
+    <p class="mb-1 fw-bold text-primary">HST</p>
+    <p class="m-0">Office</p>
+  </div>
+  <!-- Sidebar profile ends -->
+
+  <!-- Sidebar menu starts -->
+  <div class="sidebarMenuScroll">
+    <ul class="sidebar-menu">
+      <li>
+        <a href="{% url 'bookings' %}">
+          <i class="bi bi-pie-chart"></i>
+          <span class="menu-text">Room Bookings</span>
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'help_desk' %}">
+          <i class="bi bi-box"></i>
+          <span class="menu-text">Help Desk</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!-- Sidebar menu ends -->
+</nav>
+<!-- Sidebar wrapper end -->

@@ -1,0 +1,42 @@
+{% extends 'index/main.html' %}
+{% block content %}
+{% load static %}
+<div class="row gx-3    ">
+<div class="col-lg-6 col-sm-12 col-12">
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row gx-3">
+                <div class="col-sm-6">
+                    <img src="{% static 'assets/images/booking-img.png' %}" class="img-fluid rounded-2" alt="Bootstrap Gallery" />
+                </div>
+                <div class="col-sm-6">
+                    <div class="align-items-center">
+                        <h5>Meeting Room Booking</h5>
+                        <p>Resereve meeting rooms in advance.</p>
+                        <a href="{% url 'bookings' %}" class="btn btn-info">Book a Room</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-6 col-sm-12 col-12">
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row gx-3">
+                <div class="col-sm-6">
+                    <div class="align-items-center">
+                        <h5>Help Desk</h5>
+                        <p>Streamlining Support, One Ticket at a Time.</p>
+                        <a href="{% url 'help_desk' %}" class="btn btn-info">Go-to Help Desk</a>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <img src="{% static 'assets/images/help-desk.png' %}" class="img-fluid rounded-2" alt="Bootstrap Gallery" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock content %}

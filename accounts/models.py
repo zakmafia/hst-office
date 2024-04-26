@@ -31,6 +31,8 @@ class Account(AbstractUser):
     ROLE_CHOICES = [
         ('manager', 'Manager'),
         ('staff', 'Staff'),
+        ('help_desk_admin', 'Help Desk Admin'),
+        ('booking_admin', 'Booking Admin')
     ]
     email = models.EmailField(unique=True, max_length=200)
     username = models.CharField(max_length=30, unique=True)

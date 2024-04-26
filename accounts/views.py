@@ -18,7 +18,7 @@ def login(request):
         if user is not None:
             auth.login(request, user)
             messages.success(request, f'You are successfully logged in {user.username}')
-            return redirect('bookings')
+            return redirect(request.GET['next'] if 'next' in request.GET else 'bookings')
         else:
             messages.error(request, f'You are not a valid user!')
     return render(request, 'accounts/login.html')

@@ -7,7 +7,7 @@ from django.contrib import messages
 from accounts.models import Account
 from .models import Booking, Room
 from .forms import BookingForm, RoomForm
-from .utils import is_booking_valid, send_booking_email, admin_send_cancellation_email
+from .utils import is_booking_valid, send_booking_email, admin_send_cancellation_email, paginateBookings
 
 @login_required(login_url='login')
 def bookings(request):
@@ -24,6 +24,8 @@ def bookings(request):
 def my_bookings(request):
     my_bookings = Booking.objects.filter(booking_person=request.user, is_active=True).order_by('-created_on')
     my_bookings_history = Booking.objects.filter(booking_person=request.user, is_active=False).order_by('-created_on')
+    custom_range, my_bookings_history = paginateBookings(request, my_bookings_history, 10)
+    
     if 'cancel_my_booking' in request.POST:
            booking_id = request.POST.get('my_booking_id')
            booking = get_object_or_404(Booking, id=booking_id)
@@ -42,7 +44,8 @@ def my_bookings(request):
     context = {
         'title_name': 'My Bookings',
         'my_bookings': my_bookings,
-        'my_bookings_history': my_bookings_history
+        'my_bookings_history': my_bookings_history,
+        'custom_range': custom_range
     }
     return render(request, 'hst_meeting_room_booking/my_bookings.html', context)
 
