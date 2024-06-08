@@ -45,13 +45,13 @@ pip install -r requirements.txt
 5. Apply database migrations:
 python manage.py migrate
 
-5. Start the Celery worker:
+6. Start the Celery worker:
 celery -A hst_office worker --beat --scheduler django --loglevel=info
 
-5. Start the Django development server:
+7. Start the Django development server:
 python manage.py runserver
 
-5. Access the web app at http://localhost:8000 in your browser.
+8. Access the web app at http://localhost:8000 in your browser.
 
 🖥️ Usage
 Navigate to the web app in your browser. Sign up or log in to access the functionalities. Explore the various features such as room booking, IT help desk, and asset management. Enjoy a more organized office environment!
