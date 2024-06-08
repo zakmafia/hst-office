@@ -1,65 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HST SmartOffice Web App 🏢</title>
-</head>
-<body>
+# **HST SmartOffice Web App** 🏢
 
-<h1>HST SmartOffice Web App 🏢</h1>
+This system is designed for HST to manage office room booking, IT help desk management, and IT asset management.
 
-<p>This system is designed to for HST manage office room booking, IT help desk management, and IT asset management.</p>
+## **Features** 🌟
+- Office room booking management
+- IT help desk ticketing system
+- IT asset management
 
-<h2>Features 🌟</h2>
-<ul>
-    <li>Office room booking management</li>
-    <li>IT help desk ticketing system</li>
-    <li>IT asset management</li>
-</ul>
+## **Technologies Used** 💻
+- Django
+- Celery
+- Celery Beat
 
-<h2>Technologies Used 💻</h2>
-<ul>
-    <li>Django</li>
-    <li>Celery</li>
-    <li>Celery Beat</li>
-</ul>
+## **Installation** 🔧
 
-<h2>Installation 🔧</h2>
-<ol>
-    <li>Clone the repository:
-        <code>git clone https://github.com/zakmafia/hst-office.git</code><br>
-        <code>cd hst-office</code></li>
+1. **Clone the repository:**
+```bash
+git clone https://github.com/zakmafia/hst-office.git
+cd hst-office
 
-    <li>Create a virtual environment and activate it (optional but recommended):<br>
-        <code>python3 -m venv env</code><br>
-        <code>source env/bin/activate</code></li>
+Create a virtual environment and activate it (optional but recommended):
+python3 -m venv env
+source env/bin/activate
 
-    <li>Install dependencies:<br>
-        <code>pip install -r requirements.txt</code></li>
+Install dependencies:
+pip install -r requirements.txt
 
-    <li>Set up environment variables: Create a .env file in the root directory of the project. Add necessary environment variables such as database settings, secret key, etc. Refer to .env.example for required variables.</li>
+Set up environment variables: Create a .env file in the root directory of the project. Add necessary environment variables such as database settings, secret key, etc. Refer to .env.example for required variables.
+Apply database migrations:
+python manage.py migrate
 
-    <li>Apply database migrations:<br>
-        <code>python manage.py migrate</code></li>
+Start the Celery worker:
+celery -A hst_office worker --beat --scheduler django --loglevel=info
 
-    <li>Start the Celery worker:<br>
-        <code>celery -A hst_office worker --beat --scheduler django --loglevel=info</code></li>
+Start the Django development server:
+python manage.py runserver
 
-    <li>Start the Django development server:<br>
-        <code>python manage.py runserver</code></li>
-</ol>
+Access the web app at http://localhost:8000 in your browser.
 
-<p>Access the web app at <a href="http://localhost:8000">http://localhost:8000</a> in your browser.</p>
+Usage 🖥️
+Navigate to the web app in your browser. Sign up or log in to access the functionalities. Explore the various features such as room booking, IT help desk, and asset management. Enjoy a more organized office environment!
 
-<h2>Usage 🖥️</h2>
-<p>Navigate to the web app in your browser. Sign up or log in to access the functionalities. Explore the various features such as room booking, IT help desk, and asset management. Enjoy a more organized office environment!</p>
+Contributing 🤝
+Contributions are welcome! Please fork the repository and submit a pull request.
 
-<h2>Contributing 🤝</h2>
-<p>Contributions are welcome! Please fork the repository and submit a pull request.</p>
-
-<h2>License 📄</h2>
-<p>This project is licensed under the MIT License. Enjoy using the HST SmartOffice Web App! 🎉</p>
-
-</body>
-</html>
+License 📄
+This project is licensed under the MIT License. Enjoy using the HST SmartOffice Web App! 🎉
