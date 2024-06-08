@@ -6,7 +6,7 @@ Welcome to the HST SmartOffice Web App! This system is designed for HST to manag
 
 ## 🌟 **Features**
 
-Our application provides a comprehensive suite of features:
+The application provides a comprehensive suite of features:
 
 - **Office Room Booking Management:** Efficiently manage your office space by booking rooms in advance.
 - **IT Help Desk Ticketing System:** Keep track of IT issues and ensure they're addressed in a timely manner.
@@ -16,7 +16,7 @@ Our application provides a comprehensive suite of features:
 
 ## 💻 **Technologies Used**
 
-We've built our application using some of the latest technologies:
+We've built the application using some of the latest technologies:
 
 - **Django:** A high-level Python Web framework that encourages rapid development and clean, pragmatic design.
 - **Celery:** An asynchronous task queue/job queue based on distributed message passing.
