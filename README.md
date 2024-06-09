@@ -21,6 +21,7 @@ We've built the application using some of the latest technologies:
 - **Django:** A high-level Python Web framework that encourages rapid development and clean, pragmatic design.
 - **Celery:** An asynchronous task queue/job queue based on distributed message passing.
 - **Celery Beat:** A Celery's periodic task scheduler.
+- **Redis:** An in-memory data structure store used as a database, cache, and message broker. Redis supports various data structures such as strings, hashes, lists, sets, sorted sets, bitmaps, and hyperloglogs. It is often used with Celery to handle message passing and task queuing due to its speed and efficiency
 
 ---
 
